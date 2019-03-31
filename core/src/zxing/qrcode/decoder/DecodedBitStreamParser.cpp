@@ -381,7 +381,12 @@ DecodedBitStreamParser::decode(ArrayRef<char> bytes,
           }
           // not really supported; all we do is ignore it
           // Read next 8 bits (symbol sequence #) and 8 bits (parity data), then continue
-          bits.readBits(16);
+          int seq_m = bits.readBits(4);
+          int seq_n = bits.readBits(4);
+          int parity = bits.readBits(8);
+          fprintf(stderr,
+                  "STRUCTURED_APPEND: sequence 0x%02x/0x%02x. parity=0x%02x\n",
+                  seq_m, seq_n, parity);
         } else if (mode == &Mode::ECI) {
           // Count doesn't apply to ECI
           int value = parseECIValue(bits);
